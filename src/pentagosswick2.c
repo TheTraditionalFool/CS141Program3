@@ -92,13 +92,92 @@ void printErrorMessage(int isValid){
         printf("*** Quadrant rotation direction is invalid.  Please retry.\n");
     }
     else if(isValid == 5){
-        printf("*** Spot already taken.  Please retry.\n")
+        printf("*** Spot already taken.  Please retry.\n");
     }
 }//end printErrorMessage function
 
 void makeMove(char pentagoBoard[][COLUMN_NO], char rowInput, int columnInput, char playerChar){
     pentagoBoard[rowInput - 65][columnInput - 1] = playerChar;
 }//end makeMove function
+
+void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char directionInput){
+    int row;
+    int column;
+    char pentagoBoardCopy[ROW_NO][COLUMN_NO];//make a copy of the board to hold the values
+    for(row = 0; row < ROW_NO; row++){  //initialize copy of array with the original board
+        for(column = 0; column < COLUMN_NO; column++){
+            pentagoBoardCopy[row][column] = pentagoBoard[row][column];
+        }
+    }
+    if(quadrantInput == 1){
+        if(directionInput == 'R'){
+            for(row = 0; row < (ROW_NO/2); row++){
+                for(column = 0; column < (COLUMN_NO/2); column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[(COLUMN_NO/2) - column - 1][row];
+                }
+            }
+        }
+        else{
+            for(row = 0; row < ROW_NO/2; row++){
+                for(column = 0; column < COLUMN_NO/2; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[column][(COLUMN_NO/2) - row - 1];
+                }
+            }
+        }
+    }
+    else if (quadrantInput == 2){
+        if(directionInput == 'R'){
+            for(row = 0; row < (ROW_NO/2); row++){
+                for(column = (COLUMN_NO/2); column < COLUMN_NO; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[(COLUMN_NO) - column - 1][(COLUMN_NO/2) + row];
+                }
+            }
+        }
+        else{
+            for(row = 0; row < ROW_NO/2; row++){
+                for(column = COLUMN_NO/2; column < COLUMN_NO; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[column - (COLUMN_NO/2)][(ROW_NO) - row - 1];
+                }
+            }
+        }
+    }
+    else if (quadrantInput == 3){
+        if(directionInput == 'R'){
+            for(row = ROW_NO/2; row < ROW_NO; row++){
+                for(column = 0; column < COLUMN_NO/2; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[(COLUMN_NO) - column - 1][row - (COLUMN_NO/2)];
+                }
+            }
+        }
+        else{
+            for(row = ROW_NO/2; row < ROW_NO; row++){
+                for(column = 0; column < COLUMN_NO/2; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO/2) + column][(COLUMN_NO) - row - 1];
+                }
+            }
+        }
+    }
+    else if (quadrantInput == 4){
+        if(directionInput == 'R'){
+            for(row = ROW_NO/2; row < ROW_NO; row++){
+                int count = 0;
+                for(column = COLUMN_NO/2; column < COLUMN_NO; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[COLUMN_NO - count - 1][row];
+                    count++;
+                }
+            }
+        }
+        else{
+            int count = 0;
+            for(row = ROW_NO/2; row < ROW_NO; row++){
+                for(column = COLUMN_NO/2; column < COLUMN_NO; column++){
+                    pentagoBoard[row][column] = pentagoBoardCopy[column][(COLUMN_NO) - count - 1];
+                }
+                count++;
+            }
+        }
+    }
+}//end rotateGameBoard function
 
 int main(void){
     int rowPosition;
@@ -118,13 +197,14 @@ int main(void){
     }//end initializing
     printBoard(pentagoBoard);
     getUserMove(turnNumber, playerChar, &userRowInput, &userColumnInput, &userQuadrantInput, &userDirectionInput);
-    isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput);
+    isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput, pentagoBoard);
     while(isValid != 0){
         printErrorMessage(isValid);
         getUserMove(turnNumber, playerChar, &userRowInput, &userColumnInput, &userQuadrantInput, &userDirectionInput);
-        isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput);
+        isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput, pentagoBoard);
     }
     makeMove(pentagoBoard, userRowInput, userColumnInput, playerChar);
+    rotateGameBoard(pentagoBoard, userQuadrantInput, userDirectionInput);
     printBoard(pentagoBoard);
     turnNumber++;
     if(turnNumber%2 == 0){

@@ -324,6 +324,18 @@ void checkWinCondition(char pentagoBoard[][COLUMN_NO], int* countX, int* countCi
     return;
 }//end checkWinCondition function
 
+void printWinMessage(int countX, int countCircle){
+    if(countX == 5 && countCircle != 5){ //if only X got 5 in a row
+        printf("X has won the game!\n\n");
+    }
+    else if(countX != 5 && countCircle == 5){ //if only O got 5 in a row
+        printf("O has won the game!\n\n");
+    }
+    else{ //otherwise a tie
+        printf("The game was a tie!\n\n");
+    }
+}//end printWinMessage function
+
 int main(void){
     int rowPosition;
     int columnPosition;
@@ -361,9 +373,14 @@ int main(void){
             isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput, pentagoBoard);
         }
         makeMove(pentagoBoard, userRowInput, userColumnInput, playerChar);
+        if(countX == 5 || countCircle == 5){
+            printf("\n");
+            break;
+        }
         rotateGameBoard(pentagoBoard, userQuadrantInput, userDirectionInput);
         checkWinCondition(pentagoBoard, &countX, &countCircle);
         if(countX == 5 || countCircle == 5){
+            printf("\n");
             break;
         }
         turnNumber++;
@@ -375,5 +392,8 @@ int main(void){
         }
         printf("\n");
     }
+    printWinMessage(countX, countCircle);
+    printBoard(pentagoBoard);
+    printf("Thanks for playing.  Exiting...\n");
     return 0;
 }

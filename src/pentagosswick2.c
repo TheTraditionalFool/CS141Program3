@@ -324,6 +324,21 @@ void checkWinCondition(char pentagoBoard[][COLUMN_NO], int* countX, int* countCi
     return;
 }//end checkWinCondition function
 
+int checkForEmptySpace(char pentagoBoard[][COLUMN_NO]){
+    int row;
+    int column;
+    int isEmpty = 0;
+    for(row = 0; row < ROW_NO; row++){
+        for(column = 0; column < COLUMN_NO; column++){
+            if(pentagoBoard[row][column] == '.'){
+                isEmpty = 1;
+                break;
+            }
+        }
+    }
+    return isEmpty;
+}
+
 void printWinMessage(int countX, int countCircle){
     if(countX == 5 && countCircle != 5){ //if only X got 5 in a row
         printf("X has won the game!\n\n");
@@ -343,6 +358,7 @@ int main(void){
     char playerChar = 'X';
     int countX = 0;
     int countCircle = 0;
+    int isEmpty;
     char userRowInput; //decalre variables to hold user input
     int userColumnInput;
     int userQuadrantInput;
@@ -373,13 +389,15 @@ int main(void){
             isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput, pentagoBoard);
         }
         makeMove(pentagoBoard, userRowInput, userColumnInput, playerChar);
+        checkWinCondition(pentagoBoard, &countX, &countCircle);
         if(countX == 5 || countCircle == 5){
             printf("\n");
             break;
         }
         rotateGameBoard(pentagoBoard, userQuadrantInput, userDirectionInput);
         checkWinCondition(pentagoBoard, &countX, &countCircle);
-        if(countX == 5 || countCircle == 5){
+        isEmpty = checkForEmptySpace(pentagoBoard);
+        if(countX == 5 || countCircle == 5 || isEmpty == 0){
             printf("\n");
             break;
         }
@@ -394,6 +412,6 @@ int main(void){
     }
     printWinMessage(countX, countCircle);
     printBoard(pentagoBoard);
-    printf("Thanks for playing.  Exiting...\n");
+    printf("Thanks for playing.  Exiting...\n\n");
     return 0;
 }

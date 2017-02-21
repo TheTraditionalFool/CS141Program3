@@ -5,6 +5,40 @@
 #define COLUMN_NO 6
 #define ROW_NO 6
 
+void printInfo(void){
+    printf("Author: Michael Avendano & Stephen Swick\n");
+    printf("Program: #3, Pentago\n");
+    printf("TA: Moumita Samanta, Tues 2PM, 11AM\n");
+    printf("Feb 27, 2017\n\n");
+}
+
+void printInstructions(void){
+    printf("Play the two-player game of Pentago. Be the first to get 5 in a row.\n\n");
+    printf("Pentago is played on a 6 by 6 board, divided into four 3 by 3\n");
+    printf("quadrants.  There are two players, X and O, who alternate turns.\n");
+    printf("The goal of each player is to get five of their pieces in a row,\n");
+    printf("either horizontally, vertically, or diagonally.\n\n");
+
+    printf("Players take turns placing one of their pieces into an empty\n");
+    printf("space anywhere on the board, then choosing one of the four\n");
+    printf("board quadrants to rotate 90 degrees left or right.\n\n");
+
+    printf("If both players get five in a row at the same time, or the\n");
+    printf("last move is played with no five in a row, the game is a tie.\n");
+    printf("If a player makes five a row by placing a piece, there is no need\n");
+    printf("to rotate a quadrant and the player wins immediately.\n\n");
+
+    printf("Play online at:  https://perfect-pentago.net\n");
+    printf("Purchase at:     www.mindtwisterusa.com\n\n");
+
+    printf("For each move provide four inputs:\n");
+    printf("row (A-F), column (1-6), quadrant (1-4), rotation direction (L or R)\n");
+    printf("For instance input of B32R places the next piece at B3 and then\n");
+    printf("would rotate quadrant 3 (lower-left) to the right (clockwise).\n\n");
+
+    printf("At any point enter 'x' to exit the program.\n\n");
+}
+
 void printBoard(char pentagoBoard[][COLUMN_NO]){
     int rowPosition;
     int columnPosition;
@@ -365,6 +399,8 @@ int main(void){
     char userDirectionInput;
     int isValid; //declare variable to check if valid move
     char pentagoBoard[ROW_NO][COLUMN_NO];
+    printInfo();
+    printInstructions();
     for(rowPosition = 0; rowPosition<ROW_NO; rowPosition++){  //initialize 6x6 array with 36 dots
         for(columnPosition = 0; columnPosition<COLUMN_NO; columnPosition++){
             pentagoBoard[rowPosition][columnPosition] = 46;

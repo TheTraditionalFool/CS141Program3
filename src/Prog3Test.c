@@ -101,80 +101,58 @@ void makeMove(char pentagoBoard[][COLUMN_NO], char rowInput, int columnInput, ch
 }//end makeMove function
 
 void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char directionInput) {
-	int row;
-	int column;
-	char pentagoBoardCopy[ROW_NO][COLUMN_NO];//make a copy of the board to hold the values
-	for (row = 0; row < ROW_NO; row++) {  //initialize copy of array with the original board
-		for (column = 0; column < COLUMN_NO; column++) {
-			pentagoBoardCopy[row][column] = pentagoBoard[row][column];
+	int i;
+	int j;
+	int k;
+	int l;
+	int temp;
+	int startIValue;
+	int startJValue;
+	char quadMatrix[3][3];
+
+	switch (quadrantInput) {
+	case 1: startIValue = 0; startJValue = 0; break;
+	case 2: startIValue = 0; startJValue = (COLUMN_NO / 2); break;
+	case 3: startIValue = (ROW_NO / 2); startJValue = 0; break;
+	case 4: startIValue = (ROW_NO / 2); startJValue = (COLUMN_NO / 2); break;
+	default: i = 0; j = 0; break;
+	}
+
+	for (i = startIValue, k = 0; (i < startIValue + (ROW_NO / 2)) && (k<(ROW_NO / 2)); i++, k++) {
+		for (j = startJValue, l = 0; (j < startJValue + (COLUMN_NO / 2)) && (l < (COLUMN_NO / 2)); j++, l++) {
+			quadMatrix[k][l] = pentagoBoard[i][j];
+			//printf("%d %d %d\n%d %d %d\n%d %d %d\n", quadMatrix[0][0], quadMatrix[0][1], quadMatrix[0][2], quadMatrix[1][0], quadMatrix[1][1], quadMatrix[1][2], quadMatrix[2][0], quadMatrix[2][1], quadMatrix[2][2]);
 		}
 	}
-	if (quadrantInput == 1) {
-		if (directionInput == 'R') {
-			for (row = 0; row < (ROW_NO / 2); row++) {
-				for (column = 0; column < (COLUMN_NO / 2); column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO / 2) - column - 1][row];
-				}
-			}
-		}
-		else {
-			for (row = 0; row < ROW_NO / 2; row++) {
-				for (column = 0; column < COLUMN_NO / 2; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[column][(COLUMN_NO / 2) - row - 1];
-				}
-			}
+
+	for (k = 0; k < (ROW_NO / 2); k++) {
+		for (l = k; l < (COLUMN_NO / 2); l++) {
+			temp = quadMatrix[k][l];
+			quadMatrix[k][l] = quadMatrix[l][k];
+			quadMatrix[l][k] = temp;
 		}
 	}
-	else if (quadrantInput == 2) {
-		if (directionInput == 'R') {
-			for (row = 0; row < (ROW_NO / 2); row++) {
-				for (column = (COLUMN_NO / 2); column < COLUMN_NO; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO)-column - 1][(COLUMN_NO / 2) + row];
-				}
-			}
-		}
-		else {
-			for (row = 0; row < ROW_NO / 2; row++) {
-				for (column = COLUMN_NO / 2; column < COLUMN_NO; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[column - (ROW_NO / 2)][(COLUMN_NO)-row - 1];
-				}
-			}
+	if (directionInput == 'L') {
+		for (l = 0; l < (COLUMN_NO / 2); l++) { //Left Rotate
+			k = 0;
+			temp = quadMatrix[k][l];
+			quadMatrix[k][l] = quadMatrix[(ROW_NO / 2) - 1][l];
+			quadMatrix[(ROW_NO / 2) - 1][l] = temp;
 		}
 	}
-	else if (quadrantInput == 3) {
-		if (directionInput == 'R') {
-			for (row = ROW_NO / 2; row < ROW_NO; row++) {
-				for (column = 0; column < COLUMN_NO / 2; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO)-column - 1][row - (COLUMN_NO / 2)];
-				}
-			}
-		}
-		else {
-			for (row = ROW_NO / 2; row < ROW_NO; row++) {
-				for (column = 0; column < COLUMN_NO / 2; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO / 2) + column][(COLUMN_NO)-row - 1];
-				}
-			}
+
+	else {
+		for (k = 0; k < (ROW_NO / 2); k++) { //Right Rotate
+			l = 0;
+			temp = quadMatrix[k][l];
+			quadMatrix[k][l] = quadMatrix[k][(COLUMN_NO / 2) - 1];
+			quadMatrix[k][(COLUMN_NO / 2) - 1] = temp;
 		}
 	}
-	else if (quadrantInput == 4) {
-		if (directionInput == 'R') {
-			for (row = ROW_NO / 2; row < ROW_NO; row++) {
-				int count = 0;
-				for (column = COLUMN_NO / 2; column < COLUMN_NO; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[ROW_NO - count - 1][row];
-					count++;
-				}
-			}
-		}
-		else {
-			int count = 0;
-			for (row = ROW_NO / 2; row < ROW_NO; row++) {
-				for (column = COLUMN_NO / 2; column < COLUMN_NO; column++) {
-					pentagoBoard[row][column] = pentagoBoardCopy[column][(COLUMN_NO)-count - 1];
-				}
-				count++;
-			}
+
+	for (i = startIValue, k = 0; (i < startIValue + (ROW_NO / 2)) && (k<(ROW_NO / 2)); i++, k++) {
+		for (j = startJValue, l = 0; (j < startJValue + (COLUMN_NO / 2)) && (l < (COLUMN_NO / 2)); j++, l++) {
+			pentagoBoard[i][j] = quadMatrix[k][l];
 		}
 	}
 }//end rotateGameBoard function

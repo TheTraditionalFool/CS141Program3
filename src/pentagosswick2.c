@@ -2,9 +2,28 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#define COLUMN_NO 6
-#define ROW_NO 6
+#define COLUMN_NO 6 //Change this number to increase or decrease the number of columns
+#define ROW_NO 6 //Change this number to increase or decrease the number of rows
 
+/*-------------------------------------------------------------------
+ * Prog #3: Pentago
+ *
+ * Class: CS 141, Spring 2017.  Tues 11AM, 2PM Labs
+ * System: Ubuntu 16.04, Code::Blocks; Windows, Visual Studio
+ * Author: Mike Avendano & Stephen Swick
+ *
+ * Program that will execute the game of pentago.  Basically
+ * tic tac toe but one must get 5 in a row, and the board is
+ * split into 4 quadrants that rotate either left or right
+ * per players' turn.  Current program is scaleable for
+ * even squared boards. I.E. 2 rows 2 columns, 4 rows, 4 columns
+ * and etc.  Due to how the rotate function is programmed if you were
+ * to use a 7x7 board the quadrants would have an uneven division
+ * and some of the values would be deleted during rotation.
+ *--------------------------------------------------------------------
+ */
+
+ //Function that will print students info at the start of the program
 void printInfo(void){
     printf("Author: Michael Avendano & Stephen Swick\n");
     printf("Program: #3, Pentago\n");
@@ -12,6 +31,7 @@ void printInfo(void){
     printf("Feb 27, 2017\n\n");
 }
 
+//Function that will print out game instructions at the beginning of the program.
 void printInstructions(void){
     printf("Play the two-player game of Pentago. Be the first to get 5 in a row.\n\n");
     printf("Pentago is played on a 6 by 6 board, divided into four 3 by 3\n");
@@ -39,6 +59,11 @@ void printInstructions(void){
     printf("At any point enter 'x' to exit the program.\n\n");
 }
 
+/*
+ *
+ *
+ *
+ */
 void printBoard(char pentagoBoard[][COLUMN_NO]){
     int rowPosition;
     int columnPosition;
@@ -77,14 +102,14 @@ void printBoard(char pentagoBoard[][COLUMN_NO]){
 
 void getUserMove(int turnNumber, char playerChar, char* rowInput, int* columnInput, int* quadrantInput, char* directionInput){
     printf("%d. Enter row, column, quadrant, direction for %c: ", turnNumber, playerChar);
-    scanf(" %c", rowInput);
+    scanf(" %1c", rowInput);
     *rowInput = toupper(*rowInput);
     if (*rowInput == 'X'){
         return;
     }
     scanf(" %1d", columnInput);
     scanf(" %1d", quadrantInput);
-    scanf(" %c", directionInput);
+    scanf(" %1c", directionInput);
     *directionInput = toupper(*directionInput);
     return;
 }//end getUserMove function
@@ -134,228 +159,124 @@ void makeMove(char pentagoBoard[][COLUMN_NO], char rowInput, int columnInput, ch
     pentagoBoard[rowInput - 65][columnInput - 1] = playerChar;
 }//end makeMove function
 
-void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char directionInput){
-    int row;
-    int column;
-    char pentagoBoardCopy[ROW_NO][COLUMN_NO];//make a copy of the board to hold the values
-    for(row = 0; row < ROW_NO; row++){  //initialize copy of array with the original board
-        for(column = 0; column < COLUMN_NO; column++){
-            pentagoBoardCopy[row][column] = pentagoBoard[row][column];
-        }
-    }
-    if(quadrantInput == 1){
-        if(directionInput == 'R'){
-            for(row = 0; row < (ROW_NO/2); row++){
-                for(column = 0; column < (COLUMN_NO/2); column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO/2) - column - 1][row];
-                }
-            }
-        }
-        else{
-            for(row = 0; row < ROW_NO/2; row++){
-                for(column = 0; column < COLUMN_NO/2; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[column][(COLUMN_NO/2) - row - 1];
-                }
-            }
-        }
-    }
-    else if (quadrantInput == 2){
-        if(directionInput == 'R'){
-            for(row = 0; row < (ROW_NO/2); row++){
-                for(column = (COLUMN_NO/2); column < COLUMN_NO; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO) - column - 1][(COLUMN_NO/2) + row];
-                }
-            }
-        }
-        else{
-            for(row = 0; row < ROW_NO/2; row++){
-                for(column = COLUMN_NO/2; column < COLUMN_NO; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[column - (ROW_NO/2)][(COLUMN_NO) - row - 1];
-                }
-            }
-        }
-    }
-    else if (quadrantInput == 3){
-        if(directionInput == 'R'){
-            for(row = ROW_NO/2; row < ROW_NO; row++){
-                for(column = 0; column < COLUMN_NO/2; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO) - column - 1][row - (COLUMN_NO/2)];
-                }
-            }
-        }
-        else{
-            for(row = ROW_NO/2; row < ROW_NO; row++){
-                for(column = 0; column < COLUMN_NO/2; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[(ROW_NO/2) + column][(COLUMN_NO) - row - 1];
-                }
-            }
-        }
-    }
-    else if (quadrantInput == 4){
-        if(directionInput == 'R'){
-            for(row = ROW_NO/2; row < ROW_NO; row++){
-                int count = 0;
-                for(column = COLUMN_NO/2; column < COLUMN_NO; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[ROW_NO - count - 1][row];
-                    count++;
-                }
-            }
-        }
-        else{
-            int count = 0;
-            for(row = ROW_NO/2; row < ROW_NO; row++){
-                for(column = COLUMN_NO/2; column < COLUMN_NO; column++){
-                    pentagoBoard[row][column] = pentagoBoardCopy[column][(COLUMN_NO) - count - 1];
-                }
-                count++;
-            }
-        }
-    }
-}//end rotateGameBoard function
+void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char directionInput) {
+	int row;
+	int column;
+	int temp;
+	int startRowValue;
+	int startColumnValue;
+	char quadMatrix[ROW_NO/2][COLUMN_NO/2];
 
-void checkWinCondition(char pentagoBoard[][COLUMN_NO], int* countX, int* countCircle){
+	switch (quadrantInput) {
+	case 1: startRowValue = 0; startColumnValue = 0; break;
+	case 2: startRowValue = 0; startColumnValue = (COLUMN_NO / 2); break;
+	case 3: startRowValue = (ROW_NO / 2); startColumnValue = 0; break;
+	case 4: startRowValue = (ROW_NO / 2); startColumnValue = (COLUMN_NO / 2); break;
+	}
+
+	for (row = 0; row<(ROW_NO / 2); row++) {
+		for (column = 0; column < (COLUMN_NO / 2); column++) {
+			quadMatrix[row][column] = pentagoBoard[row + startRowValue][column + startColumnValue];
+			}
+	}
+
+	for (row = 0; row < (ROW_NO / 2); row++) {
+		for (column = row; column < (COLUMN_NO / 2); column++) {
+			temp = quadMatrix[row][column];
+			quadMatrix[row][column] = quadMatrix[column][row];
+			quadMatrix[column][row] = temp;
+		}
+	}
+	if (directionInput == 'L') {
+		for (column = 0; column < (COLUMN_NO / 2); column++) { //Left Rotate
+			row = 0;
+			temp = quadMatrix[row][column];
+			quadMatrix[row][column] = quadMatrix[(ROW_NO / 2) - 1][column];
+			quadMatrix[(ROW_NO / 2) - 1][column] = temp;
+		}
+	}
+
+	else {
+		for (row = 0; row < (ROW_NO / 2); row++) { //Right Rotate
+			column = 0;
+			temp = quadMatrix[row][column];
+			quadMatrix[row][column] = quadMatrix[row][(COLUMN_NO / 2) - 1];
+			quadMatrix[row][(COLUMN_NO / 2) - 1] = temp;
+		}
+	}
+
+	for (row = 0; row<(ROW_NO / 2); row++) {
+		for (column = 0; column < (COLUMN_NO / 2); column++) {
+			pentagoBoard[row + startRowValue][column + startColumnValue] = quadMatrix[row][column];
+		}
+	}
+}
+
+int checkWinCondition(char pentagoBoard[][COLUMN_NO], char playerChar){
     int diagonalSlice;
-    int diagonalNum;
+    int diagonalModificationNumber;
     int row;
     int column;
     int counter;
     for(row = 0; row < ROW_NO; row++){//count rows for five in row for X
         counter = 0; //reset to 0 for the new row
         for(column = 0; column < COLUMN_NO; column++){
-            if(pentagoBoard[row][column] == 'X'){
+            if(pentagoBoard[row][column] == playerChar){
                 counter++;
             }
             else{
                 counter = 0; //start over from 0
             }
             if(counter == 5){
-                *countX = counter;
-                break; //stop counting but keep going to check for a tie;
+                return counter;
             }
         }
     }
-    for(row = 0; row < ROW_NO; row++){//count rows for five in row for O this time
-        counter = 0; //reset to 0 for the new row
-        for(column = 0; column < COLUMN_NO; column++){
-            if(pentagoBoard[row][column] == 'O'){
+    for(column = 0; column < COLUMN_NO; column++){//count columns for five in row for X
+        counter = 0; //reset to zero for the new column
+        for(row = 0; row < ROW_NO; row++){
+            if(pentagoBoard[row][column] == playerChar){
                 counter++;
             }
             else{
                 counter = 0; //start over from 0
             }
             if(counter == 5){
-                *countCircle = counter;
-                break; //stop counting but keep going to check for a tie;
+                return counter;
             }
         }
     }
-    if(*countX != 5){
-        for(column = 0; column < COLUMN_NO; column++){//count columns for five in row for X
-            counter = 0; //reset to zero for the new column
-            for(row = 0; row < ROW_NO; row++){
-                if(pentagoBoard[row][column] == 'X'){
-                    counter++;
-                }
-                else{
-                    counter = 0; //start over from 0
-                }
-                if(counter == 5){
-                    *countX = counter;
-                    break; //stop counting but keep going to check for a tie;
-                }
+    for(diagonalSlice = 0; diagonalSlice < (ROW_NO*2)-1; diagonalSlice++){//picks the diagonal slice
+        counter = 0;
+        diagonalModificationNumber = diagonalSlice < (ROW_NO) ? 0 : diagonalSlice - ROW_NO + 1; //number to hold the phase
+        for(row = diagonalModificationNumber; row <= diagonalSlice - diagonalModificationNumber; row++){
+            if(pentagoBoard[row][diagonalSlice - row] == playerChar){ // check diagonal from top right to bottom left
+                counter++;
+            }
+            else{
+                counter = 0;
+            }
+            if(counter == 5){
+                return counter;
             }
         }
     }
-    if(*countCircle != 5){
-        for(column = 0; column < COLUMN_NO; column++){//count columns for five in row for O
-            counter = 0;
-            for(row = 0; row < ROW_NO; row++){
-                if(pentagoBoard[row][column] == 'O'){
-                    counter++;
-                }
-                else{
-                    counter = 0; //start over from 0
-                }
-                if(counter == 5){
-                    *countCircle = counter;
-                    break; //stop counting but keep going to check for a tie;
-                }
+    for(diagonalSlice = 0; diagonalSlice < (ROW_NO*2)-1; diagonalSlice++){
+        counter = 0;
+        diagonalModificationNumber = diagonalSlice < (ROW_NO) ? 0 : diagonalSlice - ROW_NO + 1;
+        for(row = diagonalModificationNumber; row <= diagonalSlice - diagonalModificationNumber; row++){
+            if(pentagoBoard[row][(ROW_NO - 1) - (diagonalSlice - row)] == playerChar){ //check diagonal from top left to bottom right
+                counter++;
+            }
+            else{
+                counter = 0;
+            }
+            if(counter == 5){
+                return counter;
             }
         }
     }
-    if(*countX != 5){
-        for(diagonalSlice = 0; diagonalSlice < (ROW_NO*2)-1; diagonalSlice++){//picks the diagonal slice
-            counter = 0;
-            diagonalNum = diagonalSlice < (ROW_NO) ? 0 : diagonalSlice - ROW_NO + 1; //number to hold the phase
-            for(row = diagonalNum; row <= diagonalSlice - diagonalNum; row++){
-                if(pentagoBoard[row][diagonalSlice - row] == 'X'){ // check diagonal from top right to bottom left
-                    counter++;
-                }
-                else{
-                    counter = 0;
-                }
-                if(counter == 5){
-                    *countX = counter;
-                    break;
-                }
-            }
-        }
-    }
-    if(*countX != 5){
-        for(diagonalSlice = 0; diagonalSlice < (ROW_NO*2)-1; diagonalSlice++){
-            counter = 0;
-            diagonalNum = diagonalSlice < (ROW_NO) ? 0 : diagonalSlice - ROW_NO + 1;
-            for(row = diagonalNum; row <= diagonalSlice - diagonalNum; row++){
-                if(pentagoBoard[row][(ROW_NO - 1) - (diagonalSlice - row)] == 'X'){ //check diagonal from top left to bottom right
-                    counter++;
-                }
-                else{
-                    counter = 0;
-                }
-                if(counter == 5){
-                    *countX = counter;
-                    break;
-                }
-            }
-        }
-    }
-    if(*countCircle != 5){
-        for(diagonalSlice = 0; diagonalSlice < (ROW_NO*2)-1; diagonalSlice++){//picks the diagonal slice
-            counter = 0;
-            diagonalNum = diagonalSlice < (ROW_NO) ? 0 : diagonalSlice - ROW_NO + 1; //number to hold the phase
-            for(row = diagonalNum; row <= diagonalSlice - diagonalNum; row++){
-                if(pentagoBoard[row][diagonalSlice - row] == 'O'){ // check diagonal from top right to bottom left
-                    counter++;
-                }
-                else{
-                    counter = 0;
-                }
-                if(counter == 5){
-                    *countCircle = counter;
-                    break;
-                }
-            }
-        }
-    }
-    if(*countCircle != 5){
-        for(diagonalSlice = 0; diagonalSlice < (ROW_NO*2)-1; diagonalSlice++){
-            counter = 0;
-            diagonalNum = diagonalSlice < (ROW_NO) ? 0 : diagonalSlice - ROW_NO + 1;
-            for(row = diagonalNum; row <= diagonalSlice - diagonalNum; row++){
-                if(pentagoBoard[row][(ROW_NO - 1) - (diagonalSlice - row)] == 'O'){ //check diagonal from top left to bottom right
-                    counter++;
-                }
-                else{
-                    counter = 0;
-                }
-                if(counter == 5){
-                    *countCircle = counter;
-                    break;
-                }
-            }
-        }
-    }
-    return;
+    return counter;
 }//end checkWinCondition function
 
 int checkForEmptySpace(char pentagoBoard[][COLUMN_NO]){
@@ -410,7 +331,7 @@ int main(void){
         printBoard(pentagoBoard);
         getUserMove(turnNumber, playerChar, &userRowInput, &userColumnInput, &userQuadrantInput, &userDirectionInput);
         if(userRowInput == 'X'){
-            printf("Exiting program...\n");
+            printf("\nExiting program...\n");
             return 0;
         }
         isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput, pentagoBoard);
@@ -419,19 +340,21 @@ int main(void){
             printErrorMessage(isValid);
             getUserMove(turnNumber, playerChar, &userRowInput, &userColumnInput, &userQuadrantInput, &userDirectionInput);
             if(userRowInput == 'X'){
-                printf("Exiting program...\n");
+                printf("\nExiting program...\n");
                 return 0;
             }
             isValid = validateMove(userRowInput, userColumnInput, userQuadrantInput, userDirectionInput, pentagoBoard);
         }
         makeMove(pentagoBoard, userRowInput, userColumnInput, playerChar);
-        checkWinCondition(pentagoBoard, &countX, &countCircle);
+        countX = checkWinCondition(pentagoBoard, 'X');
+        countCircle = checkWinCondition(pentagoBoard, 'O');
         if(countX == 5 || countCircle == 5){
             printf("\n");
             break;
         }
         rotateGameBoard(pentagoBoard, userQuadrantInput, userDirectionInput);
-        checkWinCondition(pentagoBoard, &countX, &countCircle);
+        countX = checkWinCondition(pentagoBoard, 'X');
+        countCircle = checkWinCondition(pentagoBoard, 'O');
         isEmpty = checkForEmptySpace(pentagoBoard);
         if(countX == 5 || countCircle == 5 || isEmpty == 0){
             printf("\n");

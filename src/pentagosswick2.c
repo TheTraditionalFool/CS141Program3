@@ -190,6 +190,23 @@ void makeMove(char pentagoBoard[][COLUMN_NO], char rowInput, int columnInput, ch
     pentagoBoard[rowInput - 65][columnInput - 1] = playerChar; //column is offset by 1, so just subtract by 1, row is offset by A subtract by A
 }//end makeMove function
 
+/*------------------------------------------------------------------------------------------------------------
+*Function divides the gameboard into 4 quadrants and rotates the chosen quadrant based
+*on the user input. Function will take in the gameboard array, the quadarant the player is referring 
+*to, and the direction. The quadrant input specifies where in the gameboard the rotate should start. 
+*The function then takes the transpose of the specified 3x3 quadrant. The direction input is used to determine
+*whether a left rotate happens and the rows are switched or a right rotate happens and the columns 
+* are switched. The final loop inserts the rotated quadrant back into the original gameboard. 
+*
+*Left Rotate Example:
+*      transpose         left rotate (rows 1 and 3 are switched)
+* 123              147          369
+* 456     -->      258    -->   258
+* 789              369          147  
+*
+*------------------------------------------------------------------------------------------------------------
+*/
+
 void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char directionInput) {
 	int row;
 	int column;
@@ -241,7 +258,7 @@ void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char dir
 			pentagoBoard[row + startRowValue][column + startColumnValue] = quadMatrix[row][column];
 		}
 	}
-}
+}//End RotateGameBoard
 
 /*---------------------------------------------------------------------
  * Function that will check the board for five in a row.  Takes in

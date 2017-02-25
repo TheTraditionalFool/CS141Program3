@@ -60,13 +60,13 @@ void printInstructions(void){
 }
 
 /*--------------------------------------------------------
- * Functio that will print the board.  This function in
+ * Function that will print the board.  This function in
  * theory is able to print out boards smaller than the
  * 6x6 and bigger than the 6x6 required for this program.
  * Takes a double array that is supposed to represent the
  * pentago board as a parameter.  The function will loop
  * through the elements of the array and print out the
- * value of that element which can be either a empty spot
+ * value of that element which can be either an empty spot
  * represented as a dot, an 'X', or an 'O'.
  *--------------------------------------------------------
  */
@@ -132,10 +132,10 @@ void getUserMove(int turnNumber, char playerChar, char* rowInput, int* columnInp
 
 /*-----------------------------------------------------------------------
  * Function that will take user inputs and make sure they are a valid
- * move.  It will check to make sure the input for row is in bounds.
- * the input for column is in bounds.  The quadrant input is in bounds.
- * The direction input is either L or R.  And finally make sure the
- * spot on the board isnt taken.  In that order.  Will return an int
+ * move.  It will check to make sure the input for row is in bounds,
+ * the input for column is in bounds, and the quadrant input is in bounds.
+ * the direction input is either L or R.  And finally make sure the
+ * spot on the board is not taken.  In that order.  Will return an int
  * variable for futher use.  I.E. will call the next function and
  * return an error message.  And also the function call in main
  * will keep repeating until isValid is equal to zero, meaning a valid
@@ -215,20 +215,20 @@ void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char dir
 	int startColumnValue;
 	char quadMatrix[ROW_NO/2][COLUMN_NO/2];
 
-	switch (quadrantInput) {
+	switch (quadrantInput) {//switch statement that initializes where in the board to start
 	case 1: startRowValue = 0; startColumnValue = 0; break;
 	case 2: startRowValue = 0; startColumnValue = (COLUMN_NO / 2); break;
 	case 3: startRowValue = (ROW_NO / 2); startColumnValue = 0; break;
 	case 4: startRowValue = (ROW_NO / 2); startColumnValue = (COLUMN_NO / 2); break;
 	}
 
-	for (row = 0; row < (ROW_NO / 2); row++) {
+	for (row = 0; row < (ROW_NO / 2); row++) {//Loop to pull out quadrant and store it in a 3x3 array
 		for (column = 0; column < (COLUMN_NO / 2); column++) {
 			quadMatrix[row][column] = pentagoBoard[row + startRowValue][column + startColumnValue];
 			}
 	}
 
-	for (row = 0; row < (ROW_NO / 2); row++) {
+	for (row = 0; row < (ROW_NO / 2); row++) {//This takes the quadrant and does a transpose
 		for (column = row; column < (COLUMN_NO / 2); column++) {
 			temp = quadMatrix[row][column];
 			quadMatrix[row][column] = quadMatrix[column][row];
@@ -253,7 +253,7 @@ void rotateGameBoard(char pentagoBoard[][COLUMN_NO], int quadrantInput, char dir
 		}
 	}
 
-	for (row = 0; row<(ROW_NO / 2); row++) {
+	for (row = 0; row<(ROW_NO / 2); row++) {//This takes the rotated matrix and inserts it back into the gameboard
 		for (column = 0; column < (COLUMN_NO / 2); column++) {
 			pentagoBoard[row + startRowValue][column + startColumnValue] = quadMatrix[row][column];
 		}
